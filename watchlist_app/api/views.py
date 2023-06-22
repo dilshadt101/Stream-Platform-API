@@ -47,7 +47,7 @@ class StreamPlatformAV(APIView):
 
     def get(self, request):
         platform = StreamPlatform.objects.all()
-        ser = StreamPlatformSerializer(platform, many=True)
+        ser = StreamPlatformSerializer(platform, many=True, context={'request': request})
         return Response(ser.data)
 
     def post(self, request):
@@ -101,12 +101,12 @@ class WatchListDetailAV(APIView):
 
     def get(self, request, pk):
         watch_list = WatchList.objects.get(pk=pk)
-        serializer = WatchListSerializer(movie)
+        serializer = WatchListSerializer(watch_list)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         watch_list = WatchList.objects.get(pk=pk)
-        ser = WatchListSerializer(data=request.data, instance=movie)
+        ser = WatchListSerializer(data=request.data, instance=watch_list)
         if ser.is_valid():
             ser.save()
             return Response(ser.data, status=status.HTTP_200_OK)
