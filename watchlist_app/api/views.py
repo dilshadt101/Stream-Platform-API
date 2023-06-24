@@ -46,26 +46,15 @@ from django.http import JsonResponse
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(self, request, *args, **kwargs)
 
-
-class ReviewList(mixins.ListModelMixin,
-                 mixins.CreateModelMixin,
-                 generics.GenericAPIView):
-
+class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request,*args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 class StreamPlatformAV(APIView):
 
