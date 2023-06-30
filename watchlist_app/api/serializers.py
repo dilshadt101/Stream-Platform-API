@@ -47,6 +47,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         exclude = ('watchlist',)
 
+
 class WatchListSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
 

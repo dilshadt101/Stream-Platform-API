@@ -20,3 +20,4 @@ def movie_details(request, id):
         'active': movie.active
     }
     return JsonResponse('', safe=False)
+
