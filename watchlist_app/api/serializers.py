@@ -41,6 +41,7 @@ from watchlist_app.models import *
 #             return attrs
 
 class ReviewSerializer(serializers.ModelSerializer):
+    review_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Review
