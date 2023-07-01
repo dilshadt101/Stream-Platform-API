@@ -1,5 +1,8 @@
+from _ast import Is
+
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -11,6 +14,8 @@ from watchlist_app.models import *
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from .permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+
 
 # @api_view(['GET', 'POST'])
 # def movie_list(request):
@@ -51,6 +56,7 @@ from django.shortcuts import get_object_or_404
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [ReviewUserOrReadOnly]
 
 
 class ReviewCreate(generics.CreateAPIView):
@@ -71,6 +77,7 @@ class ReviewCreate(generics.CreateAPIView):
 
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
