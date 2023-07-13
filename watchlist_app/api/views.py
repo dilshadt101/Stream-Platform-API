@@ -9,14 +9,14 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import viewsets
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
 
 from watchlist_app.models import *
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
-
+from .throttling import ReviewCreateThrottle, ReviewListThrottle
 
 # @api_view(['GET', 'POST'])
 # def movie_list(request):
@@ -58,12 +58,16 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'review-detail'
 
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     queryset = Review.objects.all()
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewListThrottle]
+
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
@@ -89,6 +93,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     # permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewListThrottle]
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
