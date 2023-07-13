@@ -54,6 +54,18 @@ from .throttling import ReviewCreateThrottle, ReviewListThrottle
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class UserReview(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+
+    # def get_queryset(self):
+    #     username = self.kwargs.get('username')
+    #     return Review.objects.filter(review_user__username=username)
+    #
+    def get_queryset(self):
+        username = self.request.query_params.get('username', None)
+        return Review.objects.filter(review_user__username=username)
+
+
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
