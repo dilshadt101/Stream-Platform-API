@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import viewsets
+from rest_framework.throttling import AnonRateThrottle
 
 from watchlist_app.models import *
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
@@ -175,6 +176,7 @@ class StreamPlatformDetailAV(APIView):
 
 class WatchListAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
+    throttle_classes = [AnonRateThrottle]
 
     def get(self, request):
         watch_list = WatchList.objects.all()
