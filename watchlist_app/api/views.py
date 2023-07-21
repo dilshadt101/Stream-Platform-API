@@ -10,6 +10,7 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
 
 from watchlist_app.models import *
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
@@ -106,6 +107,8 @@ class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     # permission_classes = [IsAuthenticated]
     throttle_classes = [ReviewListThrottle]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['review_user__username', 'active']
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 
     'watchlist_app',
 
@@ -139,7 +140,7 @@ REST_FRAMEWORK = {
         'anon': '1/day',
         'user': '3/day',
         'review-create': '1/day',
-        'review-list': '10/day',
+        'review-list': '20/day',
         'review-detail': '2/day'
     }
 }
