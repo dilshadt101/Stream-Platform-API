@@ -11,6 +11,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 from watchlist_app.models import *
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
@@ -192,6 +193,14 @@ class StreamPlatformDetailAV(APIView):
         watch_list = WatchList.objects.get(pk=pk)
         watch_list.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class WatchListView(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['avg_rating']
+    search_fields = ['title', '=platform__name']
 
 
 class WatchListAV(APIView):
