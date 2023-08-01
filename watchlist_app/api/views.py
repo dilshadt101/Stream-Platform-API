@@ -19,6 +19,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from .throttling import ReviewCreateThrottle, ReviewListThrottle
+from .pagination import WatchListPagination
 
 # @api_view(['GET', 'POST'])
 # def movie_list(request):
@@ -201,6 +202,7 @@ class WatchListGV(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['avg_rating']
     search_fields = ['title', '=platform__name']
+    pagination_class = WatchListPagination
 
 
 class WatchListAV(APIView):
