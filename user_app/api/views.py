@@ -43,5 +43,5 @@ def registration_view(request):
         else:
             data = ser.errors
 
-        return Response(data)
+        return Response(data, status.HTTP_201_CREATED)
 
